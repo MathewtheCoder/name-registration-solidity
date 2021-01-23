@@ -10815,12 +10815,12 @@
         }
       },
       "links": {},
-      "address": "0xD66C1d5B40fc6E518cBcdBE89c9572F5C9A86CdB",
-      "transactionHash": "0x79278a85d38e6a8dfe2d42f02e2769241ddbfe19044cb6eb4afddc396ff557e7"
+      "address": "0x83C373d5C6246B4739799caef222682784AB57c9",
+      "transactionHash": "0x6b03beb7a1f7422375d43b208ec48a0b9a221bdf5fc81ca6fd818c5b0548706c"
     }
   },
   "schemaVersion": "3.3.3",
-  "updatedAt": "2021-01-23T16:17:09.035Z",
+  "updatedAt": "2021-01-23T15:35:24.466Z",
   "networkType": "ethereum",
   "devdoc": {
     "details": "Name Registration contract to place a name against address for nameFee * numBlocks fee reservation.",
