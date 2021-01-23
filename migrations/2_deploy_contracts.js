@@ -1,5 +1,5 @@
-const TodoList = artifacts.require("TodoList");
+const NameReg = artifacts.require("NameReg");
 
 module.exports = function (deployer) {
-  deployer.deploy(TodoList);
+  deployer.deploy(NameReg);
 };
