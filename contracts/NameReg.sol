@@ -13,6 +13,7 @@ contract NameReg {
         bytes32 name;
     }
     mapping(bytes32 => NameRegStruct) names;
+    mapping(address => uint256) balance;
     bytes32[] nameArray;
     uint nameFeePerBlock;
     event NameRegistered(address voter, bytes32 name, uint expiry_block_number);
@@ -40,6 +41,7 @@ contract NameReg {
          new_name.name = _name;
          // TO help in getting entire name list.
          nameArray.push(_name);
+         balance[msg.sender] = msg.value;
          emit NameRegistered(msg.sender, _name, expiry_block_number);
     }
     /**
@@ -47,9 +49,10 @@ contract NameReg {
      * @param _name name to attach to address.
      * @param _numBlocks Number of blocks for which name should be freezed.
      */
-    function renew(bytes32 _name, uint _numBlocks) public  {
+    function renew(bytes32 _name, uint _numBlocks) public payable {
         // Check if name belongs to sender
         require(names[_name].account == msg.sender);
+        require(msg.value >= _numBlocks * nameFeePerBlock);
         uint expiry_block_number = block.number + _numBlocks;
         if (block.number < expiry_block_number) {
             expiry_block_number = names[_name].expiry_block_number + _numBlocks;
@@ -58,6 +61,7 @@ contract NameReg {
         new_name.expiry_block_number = expiry_block_number;
         new_name.account = msg.sender;
         new_name.name = _name;
+        balance[msg.sender] += msg.value;
         emit NameRenewed(msg.sender, _name, expiry_block_number);
     }
     /**
