@@ -70,10 +70,16 @@ contract NameReg {
      */
     function cancel(bytes32 _name) public {
         require(names[_name].account == msg.sender);
+        uint remaining_blocks = names[_name].expiry_block_number - block.number;
         int index = getNameIndex(_name);
         require(index > -1, 'Name not found in array');
         removeInOrder(uint(index));
         delete names[_name];
+        if (remaining_blocks > 0) {
+            // Refund the remaing blocks fee to the user
+            // Microether 1000000000000 is used to make sure the change is visible.
+            msg.sender.transfer(remaining_blocks * nameFeePerBlock * 1000000000000);
+        }
         emit NameCanceled(_name);
     }
     /**
