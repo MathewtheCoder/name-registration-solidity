@@ -16,6 +16,7 @@ import Web3 from 'web3';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NameRegABI from './contracts/NameReg.json'
+import MetaMaskIcon from './assets/MetaMask.svg';
 
 
 const CONTRACT_FUNCTIONS = {
@@ -48,11 +49,18 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
     width: '100%',
   },
+  loginBtn: {
+    width: "100%",
+    height: "100%",
+    "background-color": "rgb(253, 227, 203)",
+    padding: "0.5rem",
+    "border-radius": "inherit",
+    cursor: "pointer",
+  },
 }));
 
 export default function App() {
   const classes = useStyles();
-  const [refresh, setrefresh] = useState(0);
   const [loading, setLoading] = useState(true);
   const [connectionFailed, updateConnectionFailed] = useState(false);
   const [account, setAccount] = useState('');
@@ -62,12 +70,13 @@ export default function App() {
   const [name, setName] = useState('');
   const [numBlocks, setNumBlocks] = useState(0);
   const loadWeb3 = async () => {
+    setLoading(true);
     if (window.ethereum) {
       window.web3 = new Web3(window.ethereum);
       try {
         await window.ethereum.enable();
       } catch(err) {
-        updateConnectionFailed(false)
+        updateConnectionFailed(true)
       } finally {
         setLoading(false);
       }
@@ -109,7 +118,7 @@ export default function App() {
     }
   }
 
-  const walletAddress = async () => {
+  const loginToWeb3 = async () => {
     await window.ethereum.request({
       method: "eth_requestAccounts",
       params: [
@@ -124,13 +133,7 @@ export default function App() {
   useEffect(() => {
     loadWeb3();
     initContract();
-
-    if (refresh == 1) {
-      setrefresh(0);
-      initContract();
-    }
-    //esl
-  }, [refresh]);
+  }, []);
   const registerName = async () => {
     const nameBytes = window.web3.utils.asciiToHex(name);
     console.log(nameBytes, numBlocks)
@@ -231,8 +234,8 @@ export default function App() {
               <div className={classes.heroButtons}>
                 <Grid container spacing={2} justify="center">
                   <Grid item>
-                    <Button variant="contained" color="primary">
-                      Connect to Metamask
+                    <Button variant="outlined" className={classes.loginBtn} onClick={loginToWeb3}>
+                      <img src={MetaMaskIcon} alt="Connect to Metamask" /> Connect to Metamask
                     </Button>
                   </Grid>
                 </Grid>
